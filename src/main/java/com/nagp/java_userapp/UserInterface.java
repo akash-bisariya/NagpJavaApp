@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserInterface {
 	
-	UserModel addUser(UserModel service);
+	UserModel addUser(UserModel user);
 
 	List<UserModel> getAllUsers();
 

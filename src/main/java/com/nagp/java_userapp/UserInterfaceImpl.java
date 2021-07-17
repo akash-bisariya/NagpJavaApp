@@ -23,13 +23,13 @@ public class UserInterfaceImpl implements UserInterface {
 	@Override
 	public List<UserModel> getAllUsers() {
 		if (this.users.isEmpty()) {
-			this.users.add(new UserModel(counter.incrementAndGet(), "Carpenter", "For all types of wood work"));
+			this.users.add(new UserModel(counter.incrementAndGet(), "Akash Bisariya", "Bareilly"));
 			this.users
-					.add(new UserModel(counter.incrementAndGet(), "Electrician", "All types of electrical work"));
-			this.users.add(new UserModel(counter.incrementAndGet(), "Salon", "Haircut for men and women"));
-			this.users.add(new UserModel(counter.incrementAndGet(), "Cleaning", "House cleaning"));
-			this.users.add(new UserModel(counter.incrementAndGet(), "AC Repair", "AC repair and service"));
-			this.users.add(new UserModel(counter.incrementAndGet(), "Massage for men", "All types of massages"));
+					.add(new UserModel(counter.incrementAndGet(), "Anuj Kumar", "Delhi"));
+			this.users.add(new UserModel(counter.incrementAndGet(), "Santosh Khanna", "Hisar"));
+			this.users.add(new UserModel(counter.incrementAndGet(), "Sooraj Rathi", "Jaipur"));
+			this.users.add(new UserModel(counter.incrementAndGet(), "Pankaj Kumar", "Delhi"));
+			this.users.add(new UserModel(counter.incrementAndGet(), "Sandhya Kumari", "Kolkata"));
 		}
 		return this.users;
 	}
