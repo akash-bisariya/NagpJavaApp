@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment{
-        registry = 'akashbisariya/testjavanew'   
+        registry = 'akashbisariya/nagpuserapi'   
         registryCredential = 'DockerCredential'
         username = 'akashbisariya'
         sonarCredential = credentials('SonarQubeCredential')
@@ -48,14 +48,14 @@ pipeline {
         stage('Build Docker Image'){
             steps{
                 echo "Building docker image"
-                bat "docker build -t i_${username}_master_test --no-cache -f Dockerfile ."
+                bat "docker build -t i_${username}_master --no-cache -f Dockerfile ."
             }
         }
         
         stage('Push Image to DockerHub'){
             steps{
                 echo "Pushing the docker image to docker hub"
-                bat "docker tag i_${username}_master_test ${registry}:${BUILD_NUMBER}"
+                bat "docker tag i_${username}_master ${registry}:${BUILD_NUMBER}"
                 withDockerRegistry([credentialsId:'DockerCredential',url:""]){
                     bat "docker push ${registry}:${BUILD_NUMBER}"
                 }
