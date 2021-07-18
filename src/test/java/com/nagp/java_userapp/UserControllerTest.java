@@ -30,7 +30,7 @@ public class UserControllerTest {
 	 UserInterfaceImpl userInterface;
 	 
 	 @Test
-	 public void getAllUsers() throws Exception {
+	 public void getAllUsers_return_valid_response() throws Exception {
 		 UserModel user = new UserModel(1L, "Santosh Khanna", "Hisar");
 		 List<UserModel> users = new ArrayList<UserModel>(Arrays.asList(user));
 		 
