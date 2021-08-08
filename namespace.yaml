@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: nagp-k8
+  labels:
+    name: nagp-k8

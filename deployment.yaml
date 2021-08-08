@@ -1,0 +1,59 @@
+apiVersion : apps/v1
+kind : Deployment
+metadata :
+  name : nagp-web-app
+  namespace : nagp-k8
+  labels :
+    app : java-app 
+spec : 
+  replicas : 3
+  selector : 
+    matchLabels : 
+      app : java-app
+  template : 
+    metadata : 
+      labels : 
+        app : java-app
+    spec : 
+      containers :
+        - name : java-app
+          image : akashbisariya/nagpuserapi:92
+          ports :  
+          - name : http
+            containerPort : 80
+            protocol : TCP
+          resources : 
+            requests :
+              memory : "250Mi"
+              cpu : "250m"
+            limits : 
+              memory : "500Mi"
+              cpu : "500m"
+            
+            
+---
+apiVersion : "v1"
+kind : "Service"
+metadata :
+  name : "nagp-web-app-service"
+  namespace : "nagp-k8"
+  labels :
+    app : "java-app-service"
+spec :   
+  type : NodePort    
+  selector : 
+      app : "java-app"
+  ports : 
+    - protocol : TCP
+      nodePort : 30158
+      port: 80
+      targetPort : 80
+
+
+#resources:
+#  - name: my-container-vm
+#    type: container_vm.jinja
+#    properties:
+#      zone: ZONE_TO_RUN
+#      containerImage: family/cos-stable
+#      containerManifest: container_manifest

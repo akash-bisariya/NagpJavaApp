@@ -1,3 +1,4 @@
+def isRunning = "test"
 pipeline {
     agent any
     
@@ -24,9 +25,11 @@ pipeline {
             }
         }
         stage('SonarQube Analysis'){
+            when {
+                branch 'develop'
+            }
             steps{
-                echo "Performing SonarQube Analysis"
-                // bat "mvn clean verify sonar:sonar -Dsonar.login=8c8f1f2f4836d5b0021423dc69ecffd09b5ec8f7"   
+                echo "Performing SonarQube Analysis" 
                 bat "mvn clean verify sonar:sonar -Dsonar.login=${sonarCredential}"   
             }
         }
@@ -38,6 +41,9 @@ pipeline {
         }
         
         stage('Unit-Test') {
+             when {
+                branch 'master'
+            }
             steps {
                     echo "Performing Unit testing"
                     junit '**/target/surefire-reports/TEST-*.xml'
@@ -52,12 +58,31 @@ pipeline {
             }
         }
         
-        stage('Push Image to DockerHub'){
-            steps{
-                echo "Pushing the docker image to docker hub"
-                bat "docker tag i_${username}_master ${registry}:${BUILD_NUMBER}"
-                withDockerRegistry([credentialsId:'DockerCredential',url:""]){
-                    bat "docker push ${registry}:${BUILD_NUMBER}"
+        stage('Parallel Stage') {
+          
+            parallel {
+                
+                stage('Precontainer Check') {
+                    steps{
+                        echo "Checking whether container running or not and then removing"
+                            powershell '''
+                                $Container_ID = docker ps --filter 'publish=7100' -a -q
+                                if ($Container_ID -ne ""){
+                                docker rm -f $Container_ID
+                                }
+                            '''
+                   
+                    }
+                }
+                
+                stage('Push Image to DockerHub'){
+                    steps{  
+                        echo "Pushing the docker image to docker hub"
+                        bat "docker tag i_${username}_master ${registry}:${BUILD_NUMBER}"
+                        withDockerRegistry([credentialsId:'DockerCredential',url:""]){
+                        bat "docker push ${registry}:${BUILD_NUMBER}"
+                }
+            }
                 }
             }
         }
@@ -66,6 +91,14 @@ pipeline {
             steps{
                 echo "Deploying docker on local"
                 bat "docker run --name c-${username}-master -d -p 7100:9902 ${registry}:${BUILD_NUMBER}"
+            }
+        }
+        
+        stage('Kubernetes Deployment'){
+            steps{
+                echo "Deploying on Google Kubernetes"
+                bat "kubectl apply -f namespace.yaml"
+                bat "kubectl apply -f deployment.yaml"
             }
         }
     }
