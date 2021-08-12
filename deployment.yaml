@@ -20,7 +20,7 @@ spec :
           image : akashbisariya/nagpuserapi:92
           ports :  
           - name : http
-            containerPort : 80
+            containerPort : 9902
             protocol : TCP
           resources : 
             requests :
@@ -46,8 +46,8 @@ spec :
   ports : 
     - protocol : TCP
       nodePort : 30158
-      port: 80
-      targetPort : 80
+      port: 9902
+      targetPort : 9902
 
 
 #resources:
